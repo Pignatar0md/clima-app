@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Clima App",
+    "slug": "clima-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.claude.climaapp"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7b94be3a-3c0e-4b66-90d9-8f4149e2034e"
+      }
+    },
+    "owner": "pignataromd"
+  }
+}

@@ -1,0 +1,13 @@
+appId: com.claude.climaapp
+---
+- launchApp
+- assertVisible: "Clima por Ciudad"
+- tapOn:
+    id: "city-input"
+- inputText: "Porto"
+- tapOn:
+    id: "search-button"
+- assertVisible:
+    id: "weather-card"
+    timeout: 10000
+- assertVisible: "Porto"
