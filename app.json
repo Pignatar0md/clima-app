@@ -1,11 +1,19 @@
 {
   "expo": {
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "name": "Clima App",
     "slug": "clima-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "android": {
+      "splash": {
+        "backgroundColor": "#ffffff"
+      },
       "package": "com.claude.climaapp"
     },
     "extra": {
