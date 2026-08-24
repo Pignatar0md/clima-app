@@ -103,7 +103,7 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
-          npx eas build --platform ios --profile preview --non-interactive --json > build-result.json
+          npx eas-cli build --platform ios --profile preview --non-interactive --json > build-result.json
           cat build-result.json
           BUILD_URL=$(jq -r 'if type=="array" then .[0].artifacts.buildUrl else .artifacts.buildUrl end' build-result.json)
           curl -L "$BUILD_URL" -o ./app-preview.tar.gz
