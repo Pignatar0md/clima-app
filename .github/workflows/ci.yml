@@ -101,7 +101,10 @@ jobs:
       - name: Build iOS app for simulator (EAS local build)
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: npx eas build --platform ios --profile preview --non-interactive --output ./app-preview.tar.gz
+        run: npx eas build --platform ios --profile preview --non-interactive --json > build-result.json
+          cat build-result.json
+          BUILD_URL=$(jq -r 'if type=="array" then .[0].artifacts.buildUrl else .artifacts.buildUrl end' build-result.json)
+          curl -L "$BUILD_URL" -o ./app-preview.tar.gz
 
       - name: Extract .app bundle
         run: |
