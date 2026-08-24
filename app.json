@@ -21,6 +21,12 @@
         "projectId": "7b94be3a-3c0e-4b66-90d9-8f4149e2034e"
       }
     },
-    "owner": "pignataromd"
+    "owner": "pignataromd",
+    "ios": {
+      "bundleIdentifier": "com.claude.climaapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    }
   }
 }

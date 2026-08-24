@@ -53,14 +53,73 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build Android APK (EAS cloud build)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: npx eas build --platform android --profile preview --non-interactive --output ./app-preview.apk
+
       - name: Install Maestro CLI
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
 
-      # Nota: correr la app dentro del emulador requiere un build nativo
-      # previo (eas build o expo prebuild + gradle). Se omite aquí para
-      # mantener el ejemplo simple; el job queda listo para conectar
-      # el APK una vez que exista un build.
-      - name: Run E2E flow (placeholder)
-        run: echo "maestro test maestro/weather-search.yaml"
+      - name: Enable KVM for the Android emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run E2E flow on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          arch: x86_64
+          profile: pixel_6
+          script: |
+            adb install ./app-preview.apk
+            maestro test maestro/weather-search.yaml
+
+  e2e-ios:
+    name: E2E tests (iOS + Maestro)
+    runs-on: macos-latest
+    needs: lint-typecheck-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build iOS app for simulator (EAS local build)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: npx eas build --platform ios --profile preview --non-interactive --output ./app-preview.tar.gz
+
+      - name: Extract .app bundle
+        run: |
+          mkdir -p ./app-preview
+          tar -xzf ./app-preview.tar.gz -C ./app-preview
+
+      - name: Install Maestro CLI
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      - name: Boot iOS Simulator
+        run: |
+          xcrun simctl list devices available
+          xcrun simctl boot "iPhone 15" || true
+          xcrun simctl bootstatus "iPhone 15" -b
+
+      - name: Install app on simulator
+        run: |
+          APP_PATH=$(find ./app-preview -name "*.app" -maxdepth 2 | head -n 1)
+          xcrun simctl install booted "$APP_PATH"
+
+      - name: Run E2E flow
+        run: maestro test maestro/weather-search.yaml
