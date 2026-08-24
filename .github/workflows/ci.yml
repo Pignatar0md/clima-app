@@ -56,7 +56,7 @@ jobs:
       - name: Build Android APK (EAS cloud build)
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: npx eas build --platform android --profile preview --non-interactive --output ./app-preview.apk
+        run: npx eas-cli build --platform android --profile preview --non-interactive --output ./app-preview.apk
 
       - name: Install Maestro CLI
         run: |
