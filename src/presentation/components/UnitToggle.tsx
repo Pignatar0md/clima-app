@@ -7,13 +7,17 @@ export function UnitToggle() {
   const unit = useAppSelector((state) => state.settings.unit);
   const dispatch = useAppDispatch();
 
+  const onValueChange = () => {
+    dispatch(toggleUnit());
+  };
+
   return (
     <View style={styles.container} testID="unit-toggle">
       <Text>°C</Text>
       <Switch
         testID="unit-toggle-switch"
         value={unit === 'fahrenheit'}
-        onValueChange={() => dispatch(toggleUnit())}
+        onValueChange={onValueChange}
       />
       <Text>°F</Text>
     </View>
