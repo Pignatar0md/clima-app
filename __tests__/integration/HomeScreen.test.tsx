@@ -63,13 +63,16 @@ describe('HomeScreen (integración)', () => {
     fireEvent.changeText(getByTestId('city-input'), 'Porto');
     fireEvent.press(getByTestId('search-button'));
 
-    await waitFor(() => {
-      expect(getByTestId('weather-card')).toBeTruthy();
-    });
+    await waitFor(
+      () => {
+        expect(getByTestId('weather-card')).toBeTruthy();
+      },
+      { timeout: 8000, interval: 100 }
+    );
 
     expect(getByTestId('weather-city').props.children).toBe('Porto');
     expect(queryByTestId('error-message')).toBeNull();
-  });
+  }, 1000);
 
   it('muestra un error si la ciudad no existe', async () => {
     (global.fetch as jest.Mock).mockImplementationOnce(() =>

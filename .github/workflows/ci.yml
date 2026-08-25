@@ -121,8 +121,8 @@ jobs:
       - name: Boot iOS Simulator
         run: |
           xcrun simctl list devices available
-          xcrun simctl boot "iPhone 15 Pro" || true
-          xcrun simctl bootstatus "iPhone 16" -b
+          xcrun simctl boot "iPhone 17" || true
+          xcrun simctl bootstatus "iPhone 16e" -b
 
       - name: Install app on simulator
         run: |
