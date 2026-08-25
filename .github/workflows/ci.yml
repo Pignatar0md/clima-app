@@ -83,6 +83,13 @@ jobs:
             adb install ./app-preview.apk
             maestro test maestro/weather-search.yaml
 
+      - name: Upload Maestro debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-debug-android
+          path: ~/.maestro/tests/
+
   e2e-ios:
     name: E2E tests (iOS + Maestro)
     runs-on: macos-latest
@@ -131,7 +138,7 @@ jobs:
 
       - name: Run E2E flow
         run: maestro test maestro/weather-search.yaml
-        
+
       - name: Upload Maestro debug artifacts
         if: always()
         uses: actions/upload-artifact@v4

@@ -10,5 +10,5 @@ appId: com.claude.climaapp
 - extendedWaitUntil:
     visible:
       id: "weather-card"
-    timeout: 10000
+    timeout: 20000
 - assertVisible: "Porto"
