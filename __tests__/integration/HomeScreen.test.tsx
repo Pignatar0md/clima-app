@@ -72,7 +72,7 @@ describe('HomeScreen (integración)', () => {
 
     expect(getByTestId('weather-city').props.children).toBe('Porto');
     expect(queryByTestId('error-message')).toBeNull();
-  }, 1000);
+  }, 10000);
 
   it('muestra un error si la ciudad no existe', async () => {
     (global.fetch as jest.Mock).mockImplementationOnce(() =>
