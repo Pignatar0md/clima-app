@@ -5,8 +5,12 @@ appId: com.claude.climaapp
 - tapOn:
     id: "city-input"
 - inputText: "Porto"
-- tapOn:
-    id: "search-button"
+- pressKey: Enter           # Confirma la entrada y cierra el teclado nativo
+# - evalScript: ${output.sleep = (ms) => new Promise(r => setTimeout(r, ms))} # O simplemente una breve pausa implícita
+# - tapOn:
+#     id: "search-button"
+# - tapOn:
+#     id: "search-button"
 - extendedWaitUntil:
     visible:
       id: "weather-card"
