@@ -131,3 +131,10 @@ jobs:
 
       - name: Run E2E flow
         run: maestro test maestro/weather-search.yaml
+        
+      - name: Upload Maestro debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-debug-ios
+          path: ~/.maestro/tests/
