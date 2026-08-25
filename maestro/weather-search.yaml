@@ -7,7 +7,8 @@ appId: com.claude.climaapp
 - inputText: "Porto"
 - tapOn:
     id: "search-button"
-- assertVisible:
-    id: "weather-card"
+- extendedWaitUntil:
+    visible:
+      id: "weather-card"
     timeout: 10000
 - assertVisible: "Porto"
