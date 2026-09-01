@@ -1,79 +1,80 @@
-# Clima App
+# Weather App
 
-App de ejemplo en React Native + TypeScript para practicar Clean
-Architecture, Redux Toolkit, RTK Query, testing (unit/integration/e2e) y
-CI/CD — todo con herramientas gratuitas.
+Sample app in React Native + TypeScript to practice Clean Architecture, Redux Toolkit, RTK Query, testing (unit/integration/e2e), and CI/CD—all with free tools.
 
-Usa la API pública de [Open-Meteo](https://open-meteo.com/) (gratis, sin
-API key) para geocoding y forecast.
+Uses the public Open-Meteo API (https://open-meteo.com/) (free, no API key required) for geocoding and forecasting.
 
-## Cómo correr el proyecto
+## How to run the project
 
 ```bash
 npm install
 npm start
 ```
 
-## Arquitectura
+## Architecture
 
 ```
 src/
-  domain/          → Entidades, contratos (interfaces) y casos de uso.
-                      Cero dependencias de React o de la API externa.
-  data/            → Implementación de los contratos del dominio:
-                      RTK Query (api/), mappers DTO -> entidad,
-                      y el repositorio concreto.
-  presentation/    → Screens, componentes y hooks. Consume el dominio
-                      a través de hooks, nunca llama a fetch directamente.
-  store/           → Configuración de Redux (store, slices, hooks tipados).
-```
+domain/ → Entities, contracts (interfaces), and use cases.
+Zero dependencies on React or the external API.
+data/ → Implementation of domain contracts:
+RTK Query (api/), DTO mappers -> entity,
+and the concrete repository.
+presentation/ → Screens, components, and hooks. Consume the domain
 
-La regla de dependencia: `presentation` → `data` → `domain`, nunca al
-revés. El dominio no importa nada de `data` ni de `presentation`.
+through hooks, never call fetch directly.
+
+store/ → Redux configuration (store, slices, typed hooks).
+
+``
+
+The dependency rule: `presentation` → `data` → `domain`, never the other way around. The domain doesn't import anything from `data` or `presentation`.
 
 ## Scripts
 
-| Comando | Qué hace |
-|---|---|
-| `npm run typecheck` | Chequeo de tipos con `tsc` |
-| `npm run lint` | ESLint |
-| `npm test` | Tests unitarios + integración (Jest) |
-| `npm run test:coverage` | Igual, con reporte de cobertura |
-| `npm run e2e` | Corre el flujo E2E con Maestro (requiere build nativo) |
+| Command | What it does |
+
+---|---|
+
+`npm run typecheck` | Type checking with `tsc` |
+
+`npm run lint` | ESLint |
+
+`npm test` | Unit + integration tests (Jest) |
+
+`npm run test:coverage` | Same, with coverage report |
+
+`npm run e2e` | Runs the E2E flow with Maestro (requires native build) |
 
 ## Testing
 
-- **Unit**: `__tests__/unit` — casos de uso y reducers, sin React ni red.
-- **Integración**: `__tests__/integration` — renderiza `HomeScreen` con un
-  store real y `fetch` mockeado, para validar que todas las piezas están
-  bien conectadas.
-- **E2E**: `maestro/weather-search.yaml` — flujo completo sobre la app
-  instalada en un emulador/dispositivo. [Maestro](https://maestro.mobile.dev/)
-  se eligió sobre Detox por ser más simple de configurar y no requerir
-  compilar la app en modo detox-friendly.
+- **Unit**: `__tests__/unit` — use cases and reducers, without React or network.
+
+- **Integration**: `__tests__/integration` — renders `HomeScreen` with a real store and mocked `fetch`, to validate that all the pieces are properly connected.
+
+- **E2E**: `maestro/weather-search.yaml` — complete flow on the app installed on an emulator/device. [Maestro](https://maestro.mobile.dev/)
+was chosen over Detox because it is simpler to configure and does not require compiling the app in detox-friendly mode.
 
 ## CI/CD
 
-`.github/workflows/ci.yml` corre en cada PR y push a `main`:
-1. Lint + typecheck + tests unitarios/integración (siempre gratis en
-   GitHub Actions con runners `ubuntu-latest`).
-2. Job de E2E con Maestro (el build nativo necesario para instalar el
-   APK en el emulador se deja como siguiente paso — normalmente vía
-   `eas build` o `expo prebuild` + Gradle).
+`.github/workflows/ci.yml` runs in every pull request and pushes to `main`:
+1. Lint + typecheck + unit/integration tests (always free in GitHub Actions with `ubuntu-latest` runners).
 
-Todo esto corre dentro del tier gratuito de GitHub Actions (2000
-min/mes en repos privados, ilimitado en públicos).
+2. End-to-end job with Maestro (the native build needed to install the APK in the emulator is left as the next step—usually via `eas build` or `expo prebuild` + Gradle).
 
-## Decisiones de diseño (para la entrevista)
+All of this runs within the free tier of GitHub Actions (2000 min/month in private repositories, unlimited in public ones).
 
-- **RTK Query con `fakeBaseQuery` + `queryFn`**: el flujo real necesita
-  dos llamadas encadenadas (geocoding → forecast). Se usa `queryFn` para
-  controlar ese flujo a mano, pero seguimos beneficiándonos del cache,
-  los estados de loading/error y la deduplicación de RTK Query.
-- **Repositorio vía `store.dispatch(...).unwrap()`**: permite que el
-  dominio (a través del usecase) sea invocable fuera de un componente
-  React, aunque en la UI se use el hook generado (`useGetWeatherByCityQuery`)
-  por comodidad y reactividad.
-- **Mappers separados**: aíslan el DTO (forma de la API externa) de la
-  entidad de dominio, para que un cambio de proveedor de clima no
-  impacte en `domain` ni en `presentation`.
+## Design Decisions (for the interview)
+
+- **RTK Query with `fakeBaseQuery` + `queryFn`**: the actual flow needs two chained calls (geocoding → forecast). We use `queryFn` to
+manually control that flow, but we still benefit from caching,
+loading/error states, and RTK Query deduplication.
+
+- **Repository via `store.dispatch(...).unwrap()`: allows the
+domain (via the usecase) to be invoked outside of a React component,
+even though the UI uses the generated hook (`useGetWeatherByCityQuery`)
+for convenience and responsiveness.
+
+- **Separate Mappers: isolate the DTO (form of the external API) from the
+domain entity, so that a change of weather provider does not
+impact `domain` or `presentation`.
