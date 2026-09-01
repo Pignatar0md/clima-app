@@ -4,6 +4,9 @@
     "appVersionSource": "local"
   },
   "build": {
+    "staging": {
+      "channel": "staging"
+    },
     "development": {
       "developmentClient": true,
       "distribution": "internal",
@@ -22,9 +25,18 @@
       }
     },
     "production": {
+      "channel": "production",
       "android": {
         "buildType": "app-bundle"
       }
+    }
+  },
+  "update": {
+    "staging": {
+      "channel": "staging"
+    },
+    "production": {
+      "channel": "production"
     }
   }
 }

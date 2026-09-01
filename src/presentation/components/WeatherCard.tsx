@@ -1,16 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Weather, describeWeatherCode } from '../../domain/entities/Weather';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { Weather, describeWeatherCode } from "../../domain/entities/Weather";
 
 interface WeatherCardProps {
   weather: Weather;
 }
 
 export function WeatherCard({ weather }: WeatherCardProps) {
-  const unitSymbol = weather.unit === 'celsius' ? '°C' : '°F';
+  const unitSymbol = weather.unit === "celsius" ? "°C" : "°F";
 
   return (
-    <View style={styles.card} testID="weather-card">
+    <View style={styles.card} testID="weather-card" accessible>
       <Text style={styles.city} testID="weather-city">
         {weather.cityName}
       </Text>
@@ -33,25 +33,25 @@ const styles = StyleSheet.create({
     margin: 16,
     padding: 20,
     borderRadius: 12,
-    backgroundColor: '#f2f6fc',
-    alignItems: 'center',
+    backgroundColor: "#f2f6fc",
+    alignItems: "center",
   },
   city: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   temperature: {
     fontSize: 48,
-    fontWeight: '700',
+    fontWeight: "700",
     marginVertical: 4,
   },
   description: {
     fontSize: 16,
-    color: '#555',
+    color: "#555",
   },
   wind: {
     fontSize: 14,
-    color: '#777',
+    color: "#777",
     marginTop: 4,
   },
 });
